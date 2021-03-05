@@ -10,7 +10,10 @@ Add this repo to your project and add the following to a source file.
 This will make the `.eraseToAnyView()` method on `SwiftUI.View`
 used to erase their type available throughout the app along with the
 global `injectionObserver` variable you can observe to force the
-View to update when code has been injected.
+View to update when code has been injected. SwiftUI is very well
+suited to injection as, provided you observe the injectionObserver
+which has an `@Published` injection counter, you can rest assured
+your views will update as required.
 
 In short, modify the end of your `SwiftUI` View body properties
 to look like this:

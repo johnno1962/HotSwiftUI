@@ -1,11 +1,11 @@
 //
-//  AppDelegate.swift
-//  InjectionIII
+//  HotSwiftUI.swift
+//  HotSwiftUI
 //
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#2 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#4 $
 //
 
 import SwiftUI
@@ -40,7 +40,9 @@ extension SwiftUI.View {
 }
 #else
 extension SwiftUI.View {
+    @inline(__always)
     public func eraseToAnyView() -> some SwiftUI.View { return self }
+    @inline(__always)
     public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
         return self
     }
