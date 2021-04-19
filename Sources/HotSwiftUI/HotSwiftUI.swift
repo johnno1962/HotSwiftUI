@@ -5,13 +5,13 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#4 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#5 $
 //
 
 import SwiftUI
+#if DEBUG
 import Combine
 
-#if DEBUG
 public let injectionObserver = InjectionObserver()
 
 public class InjectionObserver: ObservableObject {
@@ -28,9 +28,17 @@ public class InjectionObserver: ObservableObject {
     }
 }
 
+private var loadInjectionOnce: Void = {
+    Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
+}()
+
 extension SwiftUI.View {
     public func eraseToAnyView() -> some SwiftUI.View {
         return AnyView(self)
+    }
+    public func loadInjection() -> some SwiftUI.View {
+        _ = loadInjectionOnce
+        return eraseToAnyView()
     }
     public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
         return self
@@ -42,6 +50,8 @@ extension SwiftUI.View {
 extension SwiftUI.View {
     @inline(__always)
     public func eraseToAnyView() -> some SwiftUI.View { return self }
+    @inline(__always)
+    public func loadInjection() -> some SwiftUI.View { return self }
     @inline(__always)
     public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
         return self
