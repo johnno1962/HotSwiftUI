@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#5 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#6 $
 //
 
 import SwiftUI
@@ -29,7 +29,16 @@ public class InjectionObserver: ObservableObject {
 }
 
 private var loadInjectionOnce: Void = {
-    Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
+    #if os(macOS)
+    let bundleName = "macOSInjection.bundle"
+    #elseif os(tvOS)
+    let bundleName = "tvOSInjection.bundle"
+    #elseif targetEnvironment(simulator)
+    let bundleName = "iOSInjection.bundle"
+    #else
+    let bundleName = "maciOSInjection.bundle"
+    #endif
+    Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/"+bundleName)?.load()
 }()
 
 extension SwiftUI.View {
