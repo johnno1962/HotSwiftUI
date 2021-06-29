@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#6 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#7 $
 //
 
 import SwiftUI
@@ -29,6 +29,9 @@ public class InjectionObserver: ObservableObject {
 }
 
 private var loadInjectionOnce: Void = {
+    guard objc_getClass("InjectionClient") == nil else {
+        return
+    }
     #if os(macOS)
     let bundleName = "macOSInjection.bundle"
     #elseif os(tvOS)
