@@ -21,12 +21,13 @@ to look like this:
     var body: some View {
         // Your SwiftUI code...
         .eraseToAnyView()
+        .loadInjection()
     }
 
     #if DEBUG
     @ObservedObject var iO = injectionObserver
     #endif
-```
+``` 
 You need to do this for all view properties you'd like to inject
 and have refesh on injection which is a bit tedious but the InjectionIII
 or HotReloading app can make these changes automatically using the
