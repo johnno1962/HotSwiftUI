@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#7 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#9 $
 //
 
 import SwiftUI
@@ -32,7 +32,7 @@ private var loadInjectionOnce: Void = {
     guard objc_getClass("InjectionClient") == nil else {
         return
     }
-    #if os(macOS)
+    #if os(macOS) || targetEnvironment(macCatalyst)
     let bundleName = "macOSInjection.bundle"
     #elseif os(tvOS)
     let bundleName = "tvOSInjection.bundle"
@@ -46,10 +46,10 @@ private var loadInjectionOnce: Void = {
 
 extension SwiftUI.View {
     public func eraseToAnyView() -> some SwiftUI.View {
+        _ = loadInjectionOnce
         return AnyView(self)
     }
     public func loadInjection() -> some SwiftUI.View {
-        _ = loadInjectionOnce
         return eraseToAnyView()
     }
     public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
