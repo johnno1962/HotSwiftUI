@@ -26,6 +26,8 @@ to look like this:
     #if DEBUG
     @ObservedObject var iO = injectionObserver
     #endif
+    // or use the new property wrapper...
+    @ObserveInjection var redraw
 ```
 You need to do this for all view properties you'd like to inject
 and have refesh on injection which is a bit tedious but the InjectionIII

@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#9 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#12 $
 //
 
 import SwiftUI
@@ -41,13 +41,24 @@ private var loadInjectionOnce: Void = {
     #else
     let bundleName = "maciOSInjection.bundle"
     #endif
-    Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/"+bundleName)?.load()
+    let bundlePath = "/Applications/InjectionIII.app/Contents/Resources/"+bundleName
+    guard let bundle = Bundle(path: bundlePath), bundle.load() else {
+        return print("""
+            ⚠️ Could not load injection bundle from \(bundlePath). \
+            Have you downloaded the InjectionIII.app from either \
+            https://github.com/johnno1962/InjectionIII/releases \
+            or the Mac App Store?
+            """)
+    }
 }()
 
 extension SwiftUI.View {
     public func eraseToAnyView() -> some SwiftUI.View {
         _ = loadInjectionOnce
         return AnyView(self)
+    }
+    public func enableInjection() -> some SwiftUI.View {
+        return eraseToAnyView()
     }
     public func loadInjection() -> some SwiftUI.View {
         return eraseToAnyView()
@@ -58,15 +69,37 @@ extension SwiftUI.View {
             .eraseToAnyView()
     }
 }
+
+@available(iOS 13.0, *)
+@propertyWrapper
+public struct ObserveInjection: DynamicProperty {
+    @ObservedObject private var iO = injectionObserver
+    public init() {}
+    public private(set) var wrappedValue: Int {
+        get {0} set {}
+    }
+}
+
 #else
 extension SwiftUI.View {
     @inline(__always)
     public func eraseToAnyView() -> some SwiftUI.View { return self }
     @inline(__always)
+    public func enableInjection() -> some SwiftUI.View { return self }
+    @inline(__always)
     public func loadInjection() -> some SwiftUI.View { return self }
     @inline(__always)
     public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
         return self
+    }
+}
+
+@available(iOS 13.0, *)
+@propertyWrapper
+public struct ObserveInjection {
+    public init() {}
+    public private(set) var wrappedValue: Int {
+        get {0} set {}
     }
 }
 #endif
