@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#12 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#15 $
 //
 
 import SwiftUI
@@ -47,7 +47,8 @@ private var loadInjectionOnce: Void = {
             ⚠️ Could not load injection bundle from \(bundlePath). \
             Have you downloaded the InjectionIII.app from either \
             https://github.com/johnno1962/InjectionIII/releases \
-            or the Mac App Store?
+            or the Mac App Store? Build clean if you have been \
+            using the HotReloading Swift Package from github.
             """)
     }
 }()
