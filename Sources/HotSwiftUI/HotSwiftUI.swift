@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#15 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#17 $
 //
 
 import SwiftUI
@@ -30,6 +30,13 @@ public class InjectionObserver: ObservableObject {
 
 private var loadInjectionOnce: Void = {
     guard objc_getClass("InjectionClient") == nil else {
+        return
+    }
+    // If project has a "Build Phase" running script (works on device):
+    // /Applications/InjectionIII.app/Contents/Resources/copy_bundle.sh
+    if let path = Bundle.main.path(forResource:
+        "iOSInjection", ofType: "bundle"),
+        Bundle(path: path)?.load() == true {
         return
     }
     #if os(macOS) || targetEnvironment(macCatalyst)
