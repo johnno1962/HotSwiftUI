@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#17 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#18 $
 //
 
 import SwiftUI
@@ -35,7 +35,9 @@ private var loadInjectionOnce: Void = {
     // If project has a "Build Phase" running script (works on device):
     // /Applications/InjectionIII.app/Contents/Resources/copy_bundle.sh
     if let path = Bundle.main.path(forResource:
-        "iOSInjection", ofType: "bundle"),
+            "iOSInjection", ofType: "bundle") ??
+        Bundle.main.path(forResource:
+            "macOSInjection", ofType: "bundle"),
         Bundle(path: path)?.load() == true {
         return
     }
