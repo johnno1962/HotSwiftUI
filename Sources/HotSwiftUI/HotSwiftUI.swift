@@ -5,16 +5,19 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#19 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#21 $
 //
 
 import SwiftUI
 #if DEBUG
 import Combine
 
-public let injectionObserver = InjectionObserver()
+public let injectionObserver = InjectionObserver.shared
 
 public class InjectionObserver: ObservableObject {
+    public static let shared = InjectionObserver()
+    public static var appResources =
+        "/Applications/InjectionIII.app/Contents/Resources/"
     @Published var injectionNumber = 0
     var cancellable: AnyCancellable? = nil
     let publisher = PassthroughSubject<Void, Never>()
@@ -45,14 +48,14 @@ private var loadInjectionOnce: Void = {
     let bundleName = "macOSInjection.bundle"
     #elseif os(tvOS)
     let bundleName = "tvOSInjection.bundle"
-    #elseif os(xrOS)
+    #elseif os(visionOS)
     let bundleName = "xrOSInjection.bundle"
     #elseif targetEnvironment(simulator)
     let bundleName = "iOSInjection.bundle"
     #else
     let bundleName = "maciOSInjection.bundle"
     #endif
-    let bundlePath = "/Applications/InjectionIII.app/Contents/Resources/"+bundleName
+    let bundlePath = InjectionObserver.appResources+bundleName
     guard let bundle = Bundle(path: bundlePath), bundle.load() else {
         return print("""
             ⚠️ Could not load injection bundle from \(bundlePath). \
@@ -85,7 +88,7 @@ extension SwiftUI.View {
 @available(iOS 13.0, *)
 @propertyWrapper
 public struct ObserveInjection: DynamicProperty {
-    @ObservedObject private var iO = injectionObserver
+    @ObservedObject private var iO = InjectionObserver.shared
     public init() {}
     public private(set) var wrappedValue: Int {
         get {0} set {}
