@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#21 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#22 $
 //
 
 import SwiftUI
@@ -80,12 +80,12 @@ extension SwiftUI.View {
     }
     public func onInjection(bumpState: @escaping () -> ()) -> some SwiftUI.View {
         return self
-            .onReceive(injectionObserver.publisher, perform: bumpState)
+            .onReceive(InjectionObserver.shared.publisher, perform: bumpState)
             .eraseToAnyView()
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
 public struct ObserveInjection: DynamicProperty {
     @ObservedObject private var iO = InjectionObserver.shared
@@ -109,7 +109,7 @@ extension SwiftUI.View {
     }
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
 public struct ObserveInjection {
     public init() {}

@@ -34,3 +34,6 @@ and have refesh on injection which is a bit tedious but the InjectionIII
 or HotReloading app can make these changes automatically using the
 "Prepare Project" Menu Item. You can check in these changes as, in a
 "Release" build, these functions compile to a null operation.
+
+There is a compatible version of this code along with ideas further developed for 
+"hosting" UIViewControllers in the project https://github.com/krzysztofzablocki/Inject.
