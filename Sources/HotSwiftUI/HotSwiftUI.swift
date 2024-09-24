@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#22 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#23 $
 //
 
 import SwiftUI
@@ -50,6 +50,8 @@ private var loadInjectionOnce: Void = {
     let bundleName = "tvOSInjection.bundle"
     #elseif os(visionOS)
     let bundleName = "xrOSInjection.bundle"
+    #elseif os(watchOS)
+    let bundleName = "watchOSInjection.bundle"
     #elseif targetEnvironment(simulator)
     let bundleName = "iOSInjection.bundle"
     #else
