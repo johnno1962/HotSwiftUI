@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#23 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#25 $
 //
 
 import SwiftUI
@@ -22,6 +22,7 @@ public class InjectionObserver: ObservableObject {
     var cancellable: AnyCancellable? = nil
     let publisher = PassthroughSubject<Void, Never>()
     init() {
+        _ = loadInjectionOnce // .enableInjection() optional with Xcode 16+
         cancellable = NotificationCenter.default.publisher(for:
             Notification.Name("INJECTION_BUNDLE_NOTIFICATION"))
             .sink { [weak self] change in
