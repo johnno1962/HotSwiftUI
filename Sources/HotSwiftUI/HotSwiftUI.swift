@@ -12,13 +12,14 @@ import SwiftUI
 #if DEBUG
 import Combine
 
-public let injectionObserver = InjectionObserver.shared
-
-public class InjectionObserver: ObservableObject {
+public class InjectionObserver {
     public static let shared = InjectionObserver()
     public static var appResources =
         "/Applications/InjectionIII.app/Contents/Resources/"
-    @Published var injectionNumber = 0
+    public static var keyed = [String: InjectionCounter]()
+    public class InjectionCounter: ObservableObject {
+        @Published var injectionNumber = 0
+    }
     var cancellable: AnyCancellable? = nil
     let publisher = PassthroughSubject<Void, Never>()
     init() {
@@ -26,7 +27,18 @@ public class InjectionObserver: ObservableObject {
         cancellable = NotificationCenter.default.publisher(for:
             Notification.Name("INJECTION_BUNDLE_NOTIFICATION"))
             .sink { [weak self] change in
-            self?.injectionNumber += 1
+            var incremented = false
+            for key in change.object as? [String] ?? [] {
+                if let counter = Self.keyed[key] {
+                    counter.injectionNumber += 1
+                    incremented = true
+                }
+            }
+            if !incremented {
+                for counter in Self.keyed.values {
+                    counter.injectionNumber += 1
+                }
+            }
             self?.publisher.send()
         }
     }
@@ -91,8 +103,18 @@ extension SwiftUI.View {
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
 public struct ObserveInjection: DynamicProperty {
-    @ObservedObject private var iO = InjectionObserver.shared
-    public init() {}
+    @ObservedObject private var iO: InjectionObserver.InjectionCounter
+    public init(path: String = #filePath) {
+        _ = InjectionObserver.shared
+        let url = URL(fileURLWithPath: path)
+        let key = url.deletingPathExtension().lastPathComponent
+        if let counter = InjectionObserver.keyed[key] {
+            iO = counter
+        } else {
+            iO = InjectionObserver.InjectionCounter()
+            InjectionObserver.keyed[key] = iO
+        }
+    }
     public private(set) var wrappedValue: Int {
         get {0} set {}
     }
