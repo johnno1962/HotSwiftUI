@@ -7,7 +7,7 @@ Add this repo to your project and add the following to a source file.
 @_exported import HotSwiftUI
 ```
 
-This will make the `.eraseToAnyView()` method on `SwiftUI.View`
+This will make the `.enableInjection()` method on `SwiftUI.View`
 used to erase their type available throughout the app along with the
 global `injectionObserver` variable you can observe to force the
 View to update when code has been injected. SwiftUI is very well
@@ -20,7 +20,7 @@ to look like this:
 ```Swift
     var body: some View {
         // Your SwiftUI code...
-        .eraseToAnyView()
+        .enableInjection()
     }
 
     #if DEBUG
