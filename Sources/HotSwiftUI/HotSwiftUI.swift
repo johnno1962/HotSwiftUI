@@ -5,7 +5,7 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#25 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#26 $
 //
 
 import SwiftUI
@@ -58,16 +58,18 @@ private var loadInjectionOnce: Void = {
     #else
     let bundleName = "maciOSInjection.bundle"
     #endif
-    let bundlePath = InjectionObserver.appResources+bundleName
-    guard let bundle = Bundle(path: bundlePath), bundle.load() else {
-        return print("""
+    var bundlePath = InjectionObserver.appResources+bundleName
+    for app in ["InjectionIII", "InjectionNext"] {
+        bundlePath = bundlePath.replacingOccurrences(of: "InjectionIII", with: app)
+        if let bundle = Bundle(path: bundlePath), bundle.load() { return }
+    }
+    print("""
             ⚠️ Could not load injection bundle from \(bundlePath). \
             Have you downloaded the InjectionIII.app from either \
             https://github.com/johnno1962/InjectionIII/releases \
             or the Mac App Store? Build clean if you have been \
             using the HotReloading Swift Package from github.
             """)
-    }
 }()
 
 extension SwiftUI.View {
