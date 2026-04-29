@@ -25,5 +25,6 @@ let package = Package(
         .testTarget(
             name: "HotSwiftUITests",
             dependencies: ["HotSwiftUI"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )
