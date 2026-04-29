@@ -5,23 +5,23 @@
 //  Created by John Holdsworth on 03/01/2021.
 //  Copyright © 2017 John Holdsworth. All rights reserved.
 //
-//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#26 $
+//  $Id: //depot/HotSwiftUI/Sources/HotSwiftUI/HotSwiftUI.swift#28 $
 //
 
 import SwiftUI
 #if DEBUG
 import Combine
 
-public let injectionObserver = InjectionObserver.shared
+@MainActor public let injectionObserver = InjectionObserver.shared
 
 public class InjectionObserver: ObservableObject {
-    public static let shared = InjectionObserver()
-    public static var appResources =
+    @MainActor public static let shared = InjectionObserver()
+    @MainActor public static var appResources =
         "/Applications/InjectionIII.app/Contents/Resources/"
     @Published var injectionNumber = 0
     var cancellable: AnyCancellable? = nil
     let publisher = PassthroughSubject<Void, Never>()
-    init() {
+    @MainActor init() {
         _ = loadInjectionOnce // .enableInjection() optional with Xcode 16+
         cancellable = NotificationCenter.default.publisher(for:
             Notification.Name("INJECTION_BUNDLE_NOTIFICATION"))
@@ -32,7 +32,7 @@ public class InjectionObserver: ObservableObject {
     }
 }
 
-private var loadInjectionOnce: Void = {
+@MainActor private var loadInjectionOnce: Void = {
     guard objc_getClass("InjectionClient") == nil else {
         return
     }
@@ -72,7 +72,7 @@ private var loadInjectionOnce: Void = {
             """)
 }()
 
-extension SwiftUI.View {
+@MainActor extension SwiftUI.View {
     public func eraseToAnyView() -> some SwiftUI.View {
         _ = loadInjectionOnce
         return AnyView(self)
